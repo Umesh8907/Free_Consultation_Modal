@@ -1,8 +1,10 @@
 // src/components/ConsultationModal.jsx
 import React, { useState, useEffect } from "react";
-
+import { Label, TextInput } from "flowbite-react";
+import { HiMail } from "react-icons/hi";
 import consultation_data from "./consultation_data";
 import { TfiClose } from "react-icons/tfi";
+import { RiCloseCircleFill } from "react-icons/ri";
 
 const ConsultationModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +13,13 @@ const ConsultationModal = () => {
   const [selectedConcerns, setSelectedConcerns] = useState([]);
   const [selectedImpacts, setSelectedImpacts] = useState([]);
   const [selectedAchievements, setSelectedAchievements] = useState([]);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    age: "",
+    comment: "",
+  });
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -29,7 +37,7 @@ const ConsultationModal = () => {
       setSelectedConcerns([]);
       setSelectedImpacts([]);
       setSelectedAchievements([]);
-      setFormData({ name: "", email: "", phone: "" });
+      setFormData({ name: "", phone: "", email: "", age: "", comment: "" });
     }
   }, [isOpen]);
 
@@ -160,7 +168,7 @@ const ConsultationModal = () => {
         );
       case 3:
         return (
-          <div className="flex flex-col gap-10 p-20 relative">
+          <div className="flex flex-col gap-10 p-20 ">
             <h1 className="text-[35px] font-extrabold text-[#652AB6]">
               What aspect of your health would you like to discuss during this
               consultation?
@@ -169,10 +177,10 @@ const ConsultationModal = () => {
               {consultation_data.map((category) => (
                 <div
                   key={category.id}
-                  className={`border p-4 rounded-full text-center text-white cursor-pointer ${
+                  className={`border p-4 rounded-full text-center cursor-pointer shadow-md transition-all ease-out${
                     selectedCategory?.id === category.id
-                      ? " borde-2 border-[#B955AA] text-black"
-                      : " bg-[#B955AA]"
+                      ? " bg-[#B955AA]  text-white"
+                      : " border-[#B955AA]"
                   }`}
                   onClick={() => handleCategorySelect(category)}
                 >
@@ -180,44 +188,54 @@ const ConsultationModal = () => {
                 </div>
               ))}
             </div>
-           
+
             <button
-                className="absolute bottom-0 right-0 py-2 px-8 bg-[#652AB6] text-white rounded-lg text-lg  "
-                onClick={handleNext}
-              >
-                Next
-              </button>
+              className="absolute bottom-8 right-8 py-2 px-8 bg-[#652AB6] text-white rounded-lg text-lg  "
+              onClick={handleNext3}
+            >
+              Next
+            </button>
           </div>
         );
       case 4:
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {selectedCategory.concerns.map((concern, index) => (
-              <div
-                key={index}
-                className={`p-4 border rounded cursor-pointer hover:bg-gray-200 ${
-                  selectedConcerns.includes(concern) ? "bg-gray-300" : ""
-                }`}
-                onClick={() =>
-                  handleMultiSelect(
-                    concern,
-                    selectedConcerns,
-                    setSelectedConcerns
-                  )
-                }
-              >
-                {concern}
-              </div>
-            ))}
-            <div className="flex justify-between mt-4">
+          <div className="p-20">
+            <h1 className="text-[35px] font-extrabold text-[#652AB6] mb-5 leading-tight">
+              What specific concerns related to{" "}
+              {selectedCategory && selectedCategory.category} are you currently
+              experiencing?
+            </h1>
+            <div className="grid grid-cols-3 gap-5 mb-10 ">
+              {selectedCategory.concerns.map((concern, index) => (
+                <div
+                  key={index}
+                  className={`border py-2 rounded-full font-normal text-center text-sm cursor-pointer shadow-sm transition-all ease-out ${
+                    selectedConcerns.includes(concern)
+                      ? "bg-[#B955AA]  text-white"
+                      : "border-[#B955AA]"
+                  }`}
+                  onClick={() =>
+                    handleMultiSelect(
+                      concern,
+                      selectedConcerns,
+                      setSelectedConcerns
+                    )
+                  }
+                >
+                  {concern}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between">
+              {" "}
               <button
-                className="py-2 px-4 bg-gray-500 text-white rounded"
+                className=" py-2 px-4 bg-[#652AB6] text-white rounded-lg text-lg"
                 onClick={handlePrevious}
               >
                 Previous
               </button>
               <button
-                className="py-2 px-4 bg-blue-500 text-white rounded"
+                className=" py-2 px-8 bg-[#652AB6] text-white rounded-lg text-lg"
                 onClick={handleNext4}
               >
                 Next
@@ -227,30 +245,42 @@ const ConsultationModal = () => {
         );
       case 5:
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {selectedCategory.impact.map((impact, index) => (
-              <div
-                key={index}
-                className={`p-4 border rounded cursor-pointer hover:bg-gray-200 ${
-                  selectedImpacts.includes(impact) ? "bg-gray-300" : ""
-                }`}
-                onClick={() =>
-                  handleMultiSelect(impact, selectedImpacts, setSelectedImpacts)
-                }
-              >
-                {impact}
-              </div>
-            ))}
-            <div className="flex justify-between mt-4">
+          <div className="p-20">
+            <h1 className="text-[35px] font-extrabold text-[#652AB6] mb-5 leading-tight">
+              How are these concerns impacting your daily life?
+            </h1>
+            <div className="grid grid-cols-3 gap-5 mb-10 ">
+              {selectedCategory.impact.map((impact, index) => (
+                <div
+                  key={index}
+                  className={`border py-2 rounded-full font-normal text-center text-sm cursor-pointer shadow-sm transition-all ease-out ${
+                    selectedImpacts.includes(impact)
+                      ? "bg-[#B955AA]  text-white"
+                      : "border-[#B955AA]"
+                  }`}
+                  onClick={() =>
+                    handleMultiSelect(
+                      impact,
+                      selectedImpacts,
+                      setSelectedImpacts
+                    )
+                  }
+                >
+                  {impact}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between">
+              {" "}
               <button
-                className="py-2 px-4 bg-gray-500 text-white rounded"
+                className=" py-2 px-4 bg-[#652AB6] text-white rounded-lg text-lg"
                 onClick={handlePrevious}
               >
                 Previous
               </button>
               <button
-                className="py-2 px-4 bg-blue-500 text-white rounded"
-                onClick={handleNext5}
+                className=" py-2 px-8 bg-[#652AB6] text-white rounded-lg text-lg"
+                onClick={handleNext4}
               >
                 Next
               </button>
@@ -259,36 +289,42 @@ const ConsultationModal = () => {
         );
       case 6:
         return (
-          <div className="grid grid-cols-1 gap-4">
-            {selectedCategory.achieve.map((achievement, index) => (
-              <div
-                key={index}
-                className={`p-4 border rounded cursor-pointer hover:bg-gray-200 ${
-                  selectedAchievements.includes(achievement)
-                    ? "bg-gray-300"
-                    : ""
-                }`}
-                onClick={() =>
-                  handleMultiSelect(
-                    achievement,
-                    selectedAchievements,
-                    setSelectedAchievements
-                  )
-                }
-              >
-                {achievement}
-              </div>
-            ))}
-            <div className="flex justify-between mt-4">
+          <div className="p-20">
+            <h1 className="text-[35px] font-extrabold text-[#652AB6] mb-5 leading-tight">
+              What are you hoping to achieve through this consultation?
+            </h1>
+            <div className="grid grid-cols-3 gap-5 mb-10 ">
+              {selectedCategory.achieve.map((achievement, index) => (
+                <div
+                  key={index}
+                  className={`border py-2 rounded-full font-normal text-center text-sm cursor-pointer shadow-sm transition-all ease-out ${
+                    selectedAchievements.includes(achievement)
+                      ? "bg-[#B955AA]  text-white"
+                      : "border-[#B955AA]"
+                  }`}
+                  onClick={() =>
+                    handleMultiSelect(
+                      achievement,
+                      selectedAchievements,
+                      setSelectedAchievements
+                    )
+                  }
+                >
+                  {achievement}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between">
+              {" "}
               <button
-                className="py-2 px-4 bg-gray-500 text-white rounded"
+                className=" py-2 px-4 bg-[#652AB6] text-white rounded-lg text-lg"
                 onClick={handlePrevious}
               >
                 Previous
               </button>
               <button
-                className="py-2 px-4 bg-blue-500 text-white rounded"
-                onClick={handleNext6}
+                className=" py-2 px-8 bg-[#652AB6] text-white rounded-lg text-lg"
+                onClick={handleNext4}
               >
                 Next
               </button>
@@ -298,12 +334,79 @@ const ConsultationModal = () => {
       case 7:
         return (
           <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="email4" value="Your email" />
+              </div>
+              <TextInput
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                placeholder="Name"
+                required
+                rightIcon={HiMail}
+              />
+            </div>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="email4" value="Your email" />
+              </div>
+              <TextInput
+                type="email"
+                rightIcon={HiMail}
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="email4" value="Your email" />
+              </div>
+              <TextInput
+                type="email"
+                rightIcon={HiMail}
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="email4" value="Your email" />
+              </div>
+              <TextInput
+                type="email"
+                rightIcon={HiMail}
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
+            <div className="max-w-md">
+              <div className="mb-2 block">
+                <Label htmlFor="email4" value="Your email" />
+              </div>
+              <TextInput
+                type="email"
+                rightIcon={HiMail}
+                placeholder="name@flowbite.com"
+                required
+              />
+            </div>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Name"
+              className="p-2 border rounded"
+              required
+            />
+            <input
+              type="number"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              placeholder="Phone Number"
               className="p-2 border rounded"
               required={true}
             />
@@ -312,16 +415,25 @@ const ConsultationModal = () => {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              placeholder="Email"
+              placeholder="Email Address"
               className="p-2 border rounded"
               required={true}
             />
             <input
               type="number"
-              name="phone"
-              value={formData.phone}
+              name="age"
+              value={formData.age}
               onChange={handleInputChange}
-              placeholder="Phone"
+              placeholder="Enter Your Age"
+              className="p-2 border rounded"
+              required={true}
+            />
+            <input
+              type="text"
+              name="comment"
+              value={formData.comment}
+              onChange={handleInputChange}
+              placeholder="Any specific comment you want to add"
               className="p-2 border rounded"
               required={true}
             />
@@ -368,13 +480,16 @@ const ConsultationModal = () => {
         Open Consultation Modal
       </button>
       {isOpen && (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center ">
-          <div className="bg-white  rounded-2xl shadow-lg  relative w-[950px]">
+        <div className="fixed inset-0 bg-[#652AB6] bg-opacity-30 flex items-center justify-center   ">
+          <div className="bg-[#f6edf1]  rounded-2xl shadow-lg  relative w-[950px]    ">
             <button
-              className="absolute top-2 right-2 text-gray-700 hover:text-gray-900"
+              className="absolute top-6 right-6 text-gray-700 hover:text-gray-900"
               onClick={handleClose}
             >
-              <TfiClose size={15} />
+              <RiCloseCircleFill
+                size={30}
+                className="hover:text-purple-600   text-[#652AB6]"
+              />
             </button>
             {renderStepContent()}
           </div>
